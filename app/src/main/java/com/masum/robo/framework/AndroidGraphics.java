@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.provider.MediaStore;
 
 import com.masum.robo.framework.game_interface.Graphics;
 import com.masum.robo.framework.game_interface.Image;
@@ -39,27 +40,24 @@ public class AndroidGraphics implements Graphics {
         else
             config = Bitmap.Config.ARGB_8888;
 
-        BitmapFactory.Options options=new BitmapFactory.Options();
-        options.inPreferredConfig=config;
-        InputStream in=null;
-        Bitmap bitmap=null;
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inPreferredConfig = config;
+        InputStream in = null;
+        Bitmap bitmap = null;
         try {
-            in= assets.open(fileName);
-            bitmap=BitmapFactory.decodeStream(in,null,options);
-            if (bitmap==null){
-                throw  new RuntimeException("Could not load bitmap from asset :"+fileName);
+            in = assets.open(fileName);
+            bitmap = BitmapFactory.decodeStream(in, null, options);
+            if (bitmap == null) {
+                throw new RuntimeException("Could not load bitmap from asset :" + fileName);
             }
         } catch (IOException e) {
             throw new RuntimeException("Couldn't load bitmap from asset '"
                     + fileName + "'");
-        }
-
-        finally {
-            if (in !=null){
+        } finally {
+            if (in != null) {
                 try {
                     in.close();
-                }
-                catch (IOException e){
+                } catch (IOException e) {
 
                 }
             }
@@ -71,33 +69,47 @@ public class AndroidGraphics implements Graphics {
         else
             format = ImageFormat.ARGB8888;
 
-        return new AndroidImage(bitmap,format);
+        return new AndroidImage(bitmap, format);
     }
 
     @Override
     public void clearScreen(int color) {
-     //   canvas.drawARGB();
+        canvas.drawRGB((color & 0xff0000) >> 16, (color & 0xff00) >> 8, (color & 0xff));
 
     }
 
     @Override
     public void drawLine(int x1, int y1, int x2, int y2, int color) {
-
+        paint.setColor(color);
+        canvas.drawLine(x1, y1, x2, y2, paint);
     }
 
     @Override
     public void drawReact(int x, int y, int width, int height, int color) {
+        paint.setColor(color);
+        paint.setStyle(Paint.Style.FILL);
+        canvas.drawRect(x, y, x + width - 1, y + height - 1, paint);
 
     }
 
     @Override
     public void drawImage(Image image, int x, int y, int srcX, int srcY, int srcWidth, int srcHeight) {
+        srcRect.left = srcX;
+        srcRect.top = srcY;
+        srcRect.right = srcX + srcWidth;
+        srcRect.bottom = srcY + srcHeight;
+
+        dstRect.left=x;
+        dstRect.top=y;
+        dstRect.right=x+srcWidth;
+        dstRect.bottom=y+srcHeight;
+
 
     }
 
     @Override
     public void drawImage(Image image, int x, int y) {
-
+      //  canvas.drawBitmap(((AndroidImage)Image).bitmap, x, y, null);
     }
 
 
@@ -117,7 +129,9 @@ public class AndroidGraphics implements Graphics {
     }
 
     @Override
-    public void drawARGB(int i, int j, int k, int l) {
+    public void drawARGB(int a, int r, int g, int b) {
+        paint.setStyle(Paint.Style.FILL);
+        canvas.drawARGB(a, r, g, b);
 
     }
 }
