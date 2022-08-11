@@ -6,8 +6,8 @@ import com.masum.robo.framework.game_interface.Graphics.ImageFormat;
 import com.masum.robo.framework.game_interface.Image;
 
 public class AndroidImage implements Image {
-    private Bitmap bitmap;
-    private ImageFormat format;
+    private final Bitmap bitmap;
+    private final ImageFormat format;
 
     public AndroidImage(Bitmap bitmap, ImageFormat format) {
         this.bitmap = bitmap;

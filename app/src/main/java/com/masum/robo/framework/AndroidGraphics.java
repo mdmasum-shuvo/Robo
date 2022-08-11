@@ -76,6 +76,7 @@ public class AndroidGraphics implements Graphics {
 
     @Override
     public void clearScreen(int color) {
+     //   canvas.drawARGB();
 
     }
 

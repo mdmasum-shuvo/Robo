@@ -3,7 +3,7 @@ package com.masum.robo.framework.game_interface;
 import java.util.List;
 
 public interface Input {
-    public static class TouchEvent{
+     class TouchEvent{
         static final int TOUCH_DOWN=0;
         static final int TOUCH_UP=1;
         static final int TOUCH_DRAGGED=2;
